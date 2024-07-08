@@ -9,11 +9,18 @@ const UploadForm = () => {
     description: '',
     image: null,
     percentOfPresale: '',
-    amountOfBuy: '',
+    amountOfBuy: Array(24).fill(''),
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name.startsWith("amountOfBuy")) {
+      const index = parseInt(e.target.name.split('-')[1], 10);
+      const newAmountOfBuy = [...formData.amountOfBuy];
+      newAmountOfBuy[index] = e.target.value;
+      setFormData({ ...formData, amountOfBuy: newAmountOfBuy });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleFileChange = (e) => {
@@ -24,7 +31,13 @@ const UploadForm = () => {
     e.preventDefault();
     const data = new FormData();
     for (const key in formData) {
-      data.append(key, formData[key]);
+      if (Array.isArray(formData[key])) {
+        formData[key].forEach((item, index) => {
+          data.append(`${key}[${index}]`, item);
+        });
+      } else {
+        data.append(key, formData[key]);
+      }
     }
 
     axios.post('http://localhost:5000/upload', data)
@@ -82,25 +95,36 @@ const UploadForm = () => {
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">Percent of Presale:</label>
-        <input 
-          type="number" 
-          name="percentOfPresale" 
-          value={formData.percentOfPresale} 
-          onChange={handleChange} 
-          required 
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        <div className="relative">
+          <input 
+            type="number" 
+            name="percentOfPresale" 
+            value={formData.percentOfPresale} 
+            onChange={handleChange} 
+            step="0.01"
+            min="0"
+            max="100"
+            required 
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+          />
+          <span className="absolute right-0 top-0 mt-2 mr-3 text-gray-500">%</span>
+        </div>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">Amount of Buy:</label>
-        <input 
-          type="number" 
-          name="amountOfBuy" 
-          value={formData.amountOfBuy} 
-          onChange={handleChange} 
-          required 
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        <div className="grid grid-cols-3 gap-4">
+          {formData.amountOfBuy.map((value, index) => (
+            <input 
+              key={index}
+              type="number" 
+              name={`amountOfBuy-${index}`} 
+              value={value} 
+              onChange={handleChange} 
+              required 
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          ))}
+        </div>
       </div>
       <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
     </form>
