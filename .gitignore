@@ -1,41 +1,6 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Testing
-coverage/
-
-# Production
-build/
-dist/
-
-# Misc
-.DS_Store
-*.pem
-*.swp
-*.swo
-
-# Environment Variables
-.env
-.env.*
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# Editor directories and files
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# React
-.eslintcache
+# root/.gitignore
+client/node_modules
+client/build
+server/node_modules
+server/uploads
+server/.env
