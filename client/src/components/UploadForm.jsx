@@ -1,20 +1,20 @@
 // client/src/components/UploadForm.jsx
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const UploadForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    symbol: '',
-    description: '',
+    name: "",
+    symbol: "",
+    description: "",
     image: null,
-    percentOfPresale: '',
-    amountOfBuy: Array(24).fill(''),
+    percentOfPresale: "",
+    amountOfBuy: Array(24).fill(""),
   });
 
   const handleChange = (e) => {
     if (e.target.name.startsWith("amountOfBuy")) {
-      const index = parseInt(e.target.name.split('-')[1], 10);
+      const index = parseInt(e.target.name.split("-")[1], 10);
       const newAmountOfBuy = [...formData.amountOfBuy];
       newAmountOfBuy[index] = e.target.value;
       setFormData({ ...formData, amountOfBuy: newAmountOfBuy });
@@ -40,7 +40,8 @@ const UploadForm = () => {
       }
     }
 
-    axios.post('http://localhost:5000/upload', data)
+    axios
+      .post("http://localhost:5000/upload", data)
       .then((response) => {
         console.log(response.data);
       })
@@ -50,83 +51,100 @@ const UploadForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+    >
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-        <input 
-          type="text" 
-          name="name" 
-          value={formData.name} 
-          onChange={handleChange} 
-          required 
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Name:
+        </label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Symbol:</label>
-        <input 
-          type="text" 
-          name="symbol" 
-          value={formData.symbol} 
-          onChange={handleChange} 
-          required 
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Symbol:
+        </label>
+        <input
+          type="text"
+          name="symbol"
+          value={formData.symbol}
+          onChange={handleChange}
+          required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Description:</label>
-        <textarea 
-          name="description" 
-          value={formData.description} 
-          onChange={handleChange} 
-          required 
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Description:
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Image:</label>
-        <input 
-          type="file" 
-          name="image" 
-          onChange={handleFileChange} 
-          required 
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Image:
+        </label>
+        <input
+          type="file"
+          name="image"
+          onChange={handleFileChange}
+          required
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Percent of Presale:</label>
-        <div className="relative">
-          <input 
-            type="number" 
-            name="percentOfPresale" 
-            value={formData.percentOfPresale} 
-            onChange={handleChange} 
-            step="0.01"
-            min="0"
-            max="100"
-            required 
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
-          />
-          <span className="absolute right-0 top-0 mt-2 mr-3 text-gray-500">%</span>
-        </div>
+      <div className="mb-4 presale">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Percent of Presale:
+        </label>
+        <input
+          type="number"
+          name="percentOfPresale"
+          value={formData.percentOfPresale}
+          onChange={handleChange}
+          step="0.01"
+          min="0"
+          max="100"
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+        />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Amount of Buy:</label>
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Amount of Buy:
+        </label>
         <div className="grid grid-cols-3 gap-4">
           {formData.amountOfBuy.map((value, index) => (
-            <input 
+            <input
               key={index}
-              type="number" 
-              name={`amountOfBuy-${index}`} 
-              value={value} 
-              onChange={handleChange} 
-              required 
+              type="number"
+              name={`amountOfBuy-${index}`}
+              value={value}
+              onChange={handleChange}
+              required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           ))}
         </div>
       </div>
-      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Submit
+      </button>
     </form>
   );
 };
