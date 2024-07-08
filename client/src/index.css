@@ -12,12 +12,11 @@ code {
     monospace;
 }
 
-.presale input[name="percentOfPresale"]::-webkit-outer-spin-button,
-.presale input[name="percentOfPresale"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-.presale input[name="percentOfPresale"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

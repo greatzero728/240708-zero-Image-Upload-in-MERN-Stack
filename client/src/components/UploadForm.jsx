@@ -106,7 +106,7 @@ const UploadForm = () => {
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div className="mb-4 presale">
+      <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Percent of Presale:
         </label>
@@ -134,6 +134,7 @@ const UploadForm = () => {
               name={`amountOfBuy-${index}`}
               value={value}
               onChange={handleChange}
+              step="0.01"
               min="0" // Prevent negative values
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
