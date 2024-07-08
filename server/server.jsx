@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid'); // Import UUID
 require('dotenv').config();
 
 const Item = require('./models/Item.jsx'); // Ensure you import the Item model
@@ -31,20 +32,25 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`; // Generate a unique filename
+    cb(null, uniqueName);
   },
 });
 const upload = multer({ storage });
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Route to handle file upload and save to MongoDB
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
     const { name, symbol, description, percentOfPresale, amountOfBuy } = req.body;
+    const imagePath = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     const newItem = new Item({
       name,
       symbol,
       description,
-      image: req.file.path,
+      image: imagePath,
       percentOfPresale,
       amountOfBuy,
     });
@@ -55,9 +61,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.status(500).send('Error uploading file and saving item');
   }
 });
-
-// Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Start the server
 const PORT = process.env.PORT || 5000;
