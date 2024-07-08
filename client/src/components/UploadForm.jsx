@@ -1,4 +1,4 @@
-// client/src/UploadForm.js
+// client/src/components/UploadForm.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -20,20 +20,23 @@ const UploadForm = () => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
     for (const key in formData) {
       data.append(key, formData[key]);
     }
 
-    axios.post('http://localhost:5000/upload', data)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+    try {
+      const response = await axios.post('http://localhost:5000/upload', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

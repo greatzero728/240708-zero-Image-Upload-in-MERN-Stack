@@ -5,39 +5,27 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config();
 
-// Create an instance of Express
+const Item = require('./models/Item.jsx'); // Ensure you import the Item model
+
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-// Set up mongoose connection
-const mongoURI = process.env.MONGODB_URI; // Use the environment variable
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+// Connect to MongoDB using Mongoose
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err.message);
+  });
 
-// Define a schema and model
-const itemSchema = new mongoose.Schema({
-  name: String,
-  symbol: String,
-  description: String,
-  image: String,
-  percentOfPresale: Number,
-  amountOfBuy: Number,
-});
-const Item = mongoose.model('Item', itemSchema);
-
-// Set up multer for file upload
+// Set up Multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
@@ -48,20 +36,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Route to handle file upload
-app.post('/upload', upload.single('image'), (req, res) => {
-  const newItem = new Item({
-    name: req.body.name,
-    symbol: req.body.symbol,
-    description: req.body.description,
-    image: req.file.path,
-    percentOfPresale: req.body.percentOfPresale,
-    amountOfBuy: req.body.amountOfBuy,
-  });
-  newItem.save((err, item) => {
-    if (err) return res.status(500).send(err);
-    res.status(200).json(item);
-  });
+// Route to handle file upload and save to MongoDB
+app.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    const { name, symbol, description, percentOfPresale, amountOfBuy } = req.body;
+    const newItem = new Item({
+      name,
+      symbol,
+      description,
+      image: req.file.path,
+      percentOfPresale,
+      amountOfBuy,
+    });
+    await newItem.save();
+    res.status(201).send('File uploaded and item saved successfully');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error uploading file and saving item');
+  }
 });
 
 // Serve static files from the uploads directory

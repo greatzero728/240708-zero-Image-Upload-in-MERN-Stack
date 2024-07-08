@@ -1,6 +1,6 @@
-// client/src/App.js
+// client/src/App.jsx
 import React from 'react';
-import UploadForm from './UploadForm';
+import UploadForm from './components/UploadForm';
 
 const App = () => {
   return (
