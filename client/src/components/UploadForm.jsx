@@ -10,6 +10,9 @@ const UploadForm = () => {
     image: null,
     percentOfPresale: "",
     amountOfBuy: Array(24).fill(""),
+    twitter: "",
+    telegram: "",
+    website: "",
   });
 
   const handleChange = (e) => {
@@ -32,9 +35,7 @@ const UploadForm = () => {
     const data = new FormData();
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
-        formData[key].forEach((item, index) => {
-          data.append(`${key}[${index}]`, item);
-        });
+        data.append(key, JSON.stringify(formData[key])); // Convert array to JSON string
       } else {
         data.append(key, formData[key]);
       }
@@ -133,11 +134,51 @@ const UploadForm = () => {
               name={`amountOfBuy-${index}`}
               value={value}
               onChange={handleChange}
+              min="0" // Prevent negative values
               required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           ))}
         </div>
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Twitter:
+        </label>
+        <input
+          type="text"
+          name="twitter"
+          value={formData.twitter}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Telegram:
+        </label>
+        <input
+          type="text"
+          name="telegram"
+          value={formData.telegram}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Website:
+        </label>
+        <input
+          type="text"
+          name="website"
+          value={formData.website}
+          onChange={handleChange}
+          required
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
       </div>
       <button
         type="submit"

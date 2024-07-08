@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid'); // Import UUID
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 const Item = require('./models/Item.jsx'); // Ensure you import the Item model
@@ -18,7 +18,7 @@ app.use(cors());
 
 // Connect to MongoDB using Mongoose
 const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`; // Generate a unique filename
+    const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   },
 });
@@ -44,15 +44,18 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Route to handle file upload and save to MongoDB
 app.post('/upload', upload.single('image'), async (req, res) => {
   try {
-    const { name, symbol, description, percentOfPresale, amountOfBuy } = req.body;
+    const { name, symbol, description, percentOfPresale, amountOfBuy, twitter, telegram, website } = req.body;
     const imagePath = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     const newItem = new Item({
       name,
       symbol,
       description,
       image: imagePath,
-      percentOfPresale,
-      amountOfBuy,
+      percentOfPresale: parseFloat(percentOfPresale), // Ensure percentOfPresale is parsed as a Number
+      amountOfBuy: JSON.parse(amountOfBuy).map(value => Math.max(0, Number(value))), // Convert each item in amountOfBuy to a Number and prevent negative values
+      twitter,
+      telegram,
+      website,
     });
     await newItem.save();
     res.status(201).send('File uploaded and item saved successfully');
