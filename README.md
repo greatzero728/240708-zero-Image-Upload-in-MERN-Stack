@@ -1,5 +1,7 @@
 # MERN Stack Item Upload
 
+![Image Upload in MERN Stack](https://github.com/greatzero728/240708-zero-Image-Upload-in-MERN-Stack/blob/main/Image%20Upload%20in%20MERN%20Stack.gif)
+
 This repository contains a full-stack MERN (MongoDB, Express.js, React.js, Node.js) application for uploading item details with associated metadata and images.
 
 ## Features
@@ -62,15 +64,3 @@ To run the application locally, follow these steps:
 ## Contributing
 
 Contributions are welcome! If you find any issues or improvements, please create a GitHub issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-```
-
-### Notes:
-
-- Replace placeholders like `yourusername` and `mern-item-upload.git` with your actual GitHub username and repository name.
-- Ensure to include a `.env.example` file in your repository with placeholders for environment variables like `MONGODB_URI`.
-- Customize the README as per your project specifics, adding more details or sections if needed.
-- This README provides a comprehensive guide for users to set up and run your MERN stack item upload project locally. Adjust the content based on your specific application's architecture and requirements.
