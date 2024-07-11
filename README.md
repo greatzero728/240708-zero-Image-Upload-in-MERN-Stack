@@ -60,7 +60,3 @@ To run the application locally, follow these steps:
 5. **Open in Browser:**
 
    Open your web browser and navigate to `http://localhost:3000` to see the application running.
-
-## Contributing
-
-Contributions are welcome! If you find any issues or improvements, please create a GitHub issue or submit a pull request.
