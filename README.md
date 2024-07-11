@@ -1,5 +1,6 @@
 # MERN Stack Item Upload
 
+![Image Upload in MERN Stack](https://github.com/greatzero728/240708-zero-Image-Upload-in-MERN-Stack/blob/main/Image%20Upload%20in%20MERN%20Stack.gif)
 
 This repository contains a full-stack MERN (MongoDB, Express.js, React.js, Node.js) application for uploading item details with associated metadata and images.
 
